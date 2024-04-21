@@ -1,0 +1,36 @@
+.CalculatorItem {
+    max-width: 100%;
+    flex-wrap: wrap;
+    display: table;
+    border: solid;
+    margin-bottom: 30px;
+
+}
+
+.btn {
+    
+    flex-wrap: wrap;
+    max-width: 100%;
+
+    text-align: center;
+    font-size: 15px;
+    background-color: rgb(255, 0, 0);
+    color: white;
+    margin-left: 300px;
+    margin-right: 300px;
+    padding: 10px;
+    text-decoration: none;
+}
+
+.btn:hover {
+    cursor: pointer;
+
+}
+
+.CalculatorItem p {
+    max-width: 100%;
+    flex-wrap: wrap;
+    text-align: center;
+    font-size: 20px;
+}
+
