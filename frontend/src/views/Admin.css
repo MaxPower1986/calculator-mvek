@@ -1,38 +1,25 @@
-.Admin .content {
+.Admin {
     min-height: calc(100vh - 70px - 70px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    
+    background-color: rgb(255, 255, 255);
+    max-width: 100%;
+    flex-wrap: wrap;
+}
+
+
+.Admin input {
+    
+    display: table;
+    padding: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
-    background-color: rgb(255, 255, 255);
-    max-width: 100%;
-    flex-wrap: wrap;
-}
-
-.Admin .content input, .Admin .content textarea {
-    border: none;
-    flex-wrap: wrap;
-    max-width: 100%;
-    margin-bottom: 15px;
-    padding: 10px;
-    background-color: rgb(235, 235, 235);
-    outline: none;
 
 }
 
-.Admin .content textarea {
-    border: solid;
-
-    background-color: rgb(255, 255, 255);
-    flex-wrap: wrap;
-    max-width: 100%;
-    width: 1000px;
-    min-height: 500px;
-    resize: vertical;
-}
-
-.Admin .content button {
+.Admin button {
     
     flex-wrap: wrap;
     max-width: 100%;
@@ -41,20 +28,41 @@
     font-size: 15px;
     background-color: rgb(255, 0, 0);
     color: white;
-    margin-left: 300px;
-    margin-right: 300px;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
     padding: 20px;
     text-decoration: none;
 }
 
-.Admin .content button:hover {
+.Admin button:hover {
     cursor: pointer;
 
 }
 
-.Admin .content p {
+.Admin p {
+    
     flex-wrap: wrap;
     max-width: 100%;
     text-align: center;
     font-size: 20px;
+}
+
+.op {
+    margin-right: 30px;
+}
+
+.calc-delete {
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    flex-wrap: wrap;
+    max-width: 100%;
+
+    
+    font-size: 15px;
+    background-color: rgb(255, 0, 0);
+    color: white;
+    padding: 10px;
+    text-decoration: none;
 }

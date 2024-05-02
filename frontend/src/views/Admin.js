@@ -1,98 +1,100 @@
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
+import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './Admin.css';
+import { useNavigate } from 'react-router-dom';
 
 function Admin() {
-  async function AddCalc() {
-    const json = document.getElementById('json').value
-    const login = document.getElementById('login').value
-    const pass = document.getElementById('pass').value
+  const [token, setToken] = useState('')
+  const [calcs, setCalcs] = useState([])
+  const navigate = useNavigate()
 
-    const loginApi = 'http://127.0.0.1:9001/login'
-    let jwt
-    const loginJson = {
-      login: login,
-      password: pass
+  useEffect(() => {
+    setToken(localStorage.getItem('jwt'))
+
+    if (token === null) {
+      navigate('/admin')
     }
 
-    await fetch(loginApi, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(loginJson)
-    })
+    const calcsApi = 'http://127.0.0.1:9001/calculator/get/all'
+
+    fetch(calcsApi)
       .then((result) => result.json())
       .then((result) => {
-        if (Object.hasOwn(result, 'token')) {
-          jwt = result.token
-        } else {
-          document.getElementById('message').innerText = result.message
-        }
+        // console.debug(result.data)
+        setCalcs(result.data)
       })
+  }, [token, navigate])
 
-    if (jwt === null) {
-      return
-    }
+  const addCalc = async () => {
+    const nameCalc = document.getElementById('name').value
+    const percent = document.getElementById('percent').value
 
-    const api = 'http://127.0.0.1:9001/calculator/add'
-    const obj = JSON.parse(json)
-    const data = {
-      token: jwt,
-      calculator: obj
-    }
-
-    await fetch(api, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then((result) => result.json())
-      .then((result) => {
-        document.getElementById('message').innerText = result.message
-      })
-  }
-
-  const example = {
-    "nameCalc": "Название калькулятора",
-    "numberFields": [
-      {
-        "fieldName": "Введите число 1",
-        "field": "a"
-      },
-      {
-        "fieldName": "Введите число 2",
-        "field": "b"
-      },
-      {
-        "fieldName": "Введите число 3",
-        "field": "c"
+    if (token !== null) {
+      const api = 'http://127.0.0.1:9001/calculator/add'
+      const calculator = {
+        nameCalc,
+        percent
       }
-    ],
-    "formula": "a + b + c"
+      const data = {
+        token,
+        calculator
+      }
+
+      await fetch(api, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then((result) => result.json())
+        .then((result) => {
+          document.getElementById('message').innerText = result.message
+        })
+    }
   }
 
+  const deleteCalc = async (id) => {
+    if (token !== null) {
+      const api = 'http://127.0.0.1:9001/calculator/delete/' + id
+      
+      const data = {
+        token
+      }
+
+      await fetch(api, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then((result) => result.json())
+        .then((result) => {
+          document.getElementById('message').innerText = result.message
+        })
+    }
+  }
 
   return (
     <>
-
+      <Header />
       <div className='Admin'>
-        <div className='content'>
-          <p>Создать калькулятор:</p>
-          <p>
-             Чтобы добавить калькулятор введите его структуру в формате JSON:
-          </p>
-          <pre>
-            {JSON.stringify(example, null, 2)}
-          </pre>
-          <textarea id="json" placeholder='Введите JSON код'/>
-          <input id="login" type="text" placeholder="Введите логин от админа" />
-          <input id="pass" type="password" placeholder="Введите пароль от админа" />
-          <button id="create" onClick={() => AddCalc()}>Создать</button>
-          <p id='message'></p>
+        <p>Создать калькулятор:</p>
+        <input id="name" type="text" placeholder="Имя калькулятора" />
+        <input id="percent" type="number" placeholder="Процент кредита" />
+        <button id="create" onClick={addCalc}>Создать</button>
+        <p id='message'></p>
+        <div className='calcs'>
+          {calcs.map((item) => (
+            <div className='calc' key={item._id}>
+              <p className='calc-name'>Имя калькулятора: {item.nameCalc}&nbsp; Процент: {item.percent}</p>
+              <p className='calc-percent'></p>
+              <button className='calc-delete' onClick={() => deleteCalc(item._id)}>Удалить калькулятор</button>
+
+            </div>
+          ))}
         </div>
       </div>
       <Footer />
